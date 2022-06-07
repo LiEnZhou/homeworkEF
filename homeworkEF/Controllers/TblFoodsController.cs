@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using homeworkEF.Models;
+using homeworkEF.Models.ViewModel;
 
 namespace homeworkEF.Controllers
 {
@@ -19,23 +20,23 @@ namespace homeworkEF.Controllers
         }
 
         // GET: TblFoods
-        public async Task<IActionResult> Index()
+        public  IActionResult Index()
         {
               return _context.TblFoods != null ? 
-                          View(await _context.TblFoods.ToListAsync()) :
+                          View( _context.TblFoods.ToList()) :
                           Problem("Entity set 'HomeworkDBContext.TblFoods'  is null.");
         }
 
         // GET: TblFoods/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public  IActionResult Details(int? id)
         {
             if (id == null || _context.TblFoods == null)
             {
                 return NotFound();
             }
 
-            var tblFood = await _context.TblFoods
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var tblFood =  _context.TblFoods
+                .FirstOrDefault(m => m.Id == id);
             if (tblFood == null)
             {
                 return NotFound();
@@ -55,26 +56,26 @@ namespace homeworkEF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Style,Starts,Price,Comment")] TblFood tblFood)
+        public  IActionResult Create([Bind("Id,Name,Style,Starts,Price,Comment")] TblFood tblFood)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(tblFood);
-                await _context.SaveChangesAsync();
+                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View(tblFood);
         }
 
         // GET: TblFoods/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public  IActionResult Edit(int? id)
         {
             if (id == null || _context.TblFoods == null)
             {
                 return NotFound();
             }
 
-            var tblFood = await _context.TblFoods.FindAsync(id);
+            var tblFood =  _context.TblFoods.Find(id);
             if (tblFood == null)
             {
                 return NotFound();
@@ -87,7 +88,7 @@ namespace homeworkEF.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Style,Starts,Price,Comment")] TblFood tblFood)
+        public  IActionResult Edit(int id, [Bind("Id,Name,Style,Starts,Price,Comment")] TblFood tblFood)
         {
             if (id != tblFood.Id)
             {
@@ -99,7 +100,7 @@ namespace homeworkEF.Controllers
                 try
                 {
                     _context.Update(tblFood);
-                    await _context.SaveChangesAsync();
+                     _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -118,15 +119,15 @@ namespace homeworkEF.Controllers
         }
 
         // GET: TblFoods/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public  IActionResult Delete(int? id)
         {
             if (id == null || _context.TblFoods == null)
             {
                 return NotFound();
             }
 
-            var tblFood = await _context.TblFoods
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var tblFood =  _context.TblFoods
+                .FirstOrDefault(m => m.Id == id);
             if (tblFood == null)
             {
                 return NotFound();
@@ -138,19 +139,19 @@ namespace homeworkEF.Controllers
         // POST: TblFoods/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public  IActionResult DeleteConfirmed(int id)
         {
             if (_context.TblFoods == null)
             {
                 return Problem("Entity set 'HomeworkDBContext.TblFoods'  is null.");
             }
-            var tblFood = await _context.TblFoods.FindAsync(id);
+            var tblFood =  _context.TblFoods.Find(id);
             if (tblFood != null)
             {
                 _context.TblFoods.Remove(tblFood);
             }
             
-            await _context.SaveChangesAsync();
+             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
@@ -158,5 +159,24 @@ namespace homeworkEF.Controllers
         {
           return (_context.TblFoods?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+        public IActionResult Search()
+        {
+            ViewData["Message"] = "Food =>取得表單";
+            return View(new FoodViewModel());
+        }
+        [HttpPost]
+        public IActionResult Search(FoodParams searchParams)
+        {
+            var viewModel = new FoodViewModel();
+            var searchResult = _context.TblFoods.Where(f => f.Price >= searchParams.MinPrice && f.Price <= searchParams.MaxPrice)
+                .Where(f => f.Starts ==searchParams.Starts);
+
+            viewModel.SearchParams = searchParams;
+            viewModel.Foods=searchResult.ToList();
+            ViewData["Message"] = $"找到{viewModel.Foods.Count}";
+
+            return View(viewModel);
+        }
     }
+
 }
