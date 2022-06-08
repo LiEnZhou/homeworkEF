@@ -1,34 +1,40 @@
-﻿@model homeworkEF.Models.ViewModel.FoodViewModel
+﻿@model homeworkEF.Models.ViewModel.MakeupViewModel
 
 @{
     ViewData["Title"] = "Search";
 }
 
-<h1>Edit</h1>
+<h1>Search</h1>
 
-<h4>Food</h4>
+<h4>Makeup</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Search">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="SearchParams.MinPrice" class="control-label"></label>
+           <div class="row">
+            <div class="form-group row col-md-2">
+                <label asp-for="SearchParams.MinPrice" class="control-label text-info"></label>
                 <input asp-for="SearchParams.MinPrice" class="form-control" />
                 <span asp-validation-for="SearchParams.MinPrice" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="SearchParams.MaxPrice" class="control-label"></label>
+            <div class="form-group row col-md-1"></div>
+            <div class="form-group row col-md-2">
+                <label asp-for="SearchParams.MaxPrice" class="control-label text-info"></label>
                 <input asp-for="SearchParams.MaxPrice" class="form-control" />
                 <span asp-validation-for="SearchParams.MaxPrice" class="text-danger"></span>
             </div>
-           <div class="form-group">
-                <label asp-for="SearchParams.Starts" class="control-label"></label>
-                <input asp-for="SearchParams.Starts" class="form-control" />
-                <span asp-validation-for="SearchParams.Starts" class="text-danger"></span>
+            <div class="form-group row col-md-1"></div>
+           <div class="form-group row col-md-2">
+                <label asp-for="SearchParams.Color" class="control-label text-info"></label>
+                <input asp-for="SearchParams.Color" class="form-control" />
+                <span asp-validation-for="SearchParams.Color" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group row col-md-1"></div>
+            <div class="form-group row col-md-2">
+                <input type="submit" value="Search" class="btn btn-warning "style="height:60%" />
+            </div>
+               <div class="form-group row col-md-1"></div>
             </div>
         </form>
     </div>
@@ -40,19 +46,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Foods[0].Name)
+                @Html.DisplayNameFor(model => model.Makeups[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Foods[0].Price)
+                @Html.DisplayNameFor(model => model.Makeups[0].Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Foods[0].Starts)
+                @Html.DisplayNameFor(model => model.Makeups[0].Color)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Foods ) {
+@foreach (var item in Model.Makeups ) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -61,7 +67,7 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Starts)
+                @Html.DisplayFor(modelItem => item.Color)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

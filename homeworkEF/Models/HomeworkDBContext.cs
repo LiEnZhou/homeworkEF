@@ -20,6 +20,7 @@ namespace homeworkEF.Models
         public virtual DbSet<TblFood> TblFoods { get; set; } = null!;
         public virtual DbSet<TblFoodOrder> TblFoodOrders { get; set; } = null!;
         public virtual DbSet<TblHero> TblHeroes { get; set; } = null!;
+        public virtual DbSet<TblMakeup> TblMakeups { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -72,6 +73,19 @@ namespace homeworkEF.Models
                 entity.ToTable("TblHero");
 
                 entity.Property(e => e.Name).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<TblMakeup>(entity =>
+            {
+                entity.ToTable("TblMakeup");
+
+                entity.Property(e => e.Color)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             });
 
             OnModelCreatingPartial(modelBuilder);

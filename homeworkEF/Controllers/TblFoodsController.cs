@@ -168,8 +168,8 @@ namespace homeworkEF.Controllers
         public IActionResult Search(FoodParams searchParams)
         {
             var viewModel = new FoodViewModel();
-            var searchResult = _context.TblFoods.Where(f => f.Price >= searchParams.MinPrice && f.Price <= searchParams.MaxPrice)
-                .Where(f => f.Starts ==searchParams.Starts);
+            var searchResult = _context.TblFoods.Where(f => f.Price >= searchParams.MinPrice && f.Price <= searchParams.MaxPrice);
+               
 
             viewModel.SearchParams = searchParams;
             viewModel.Foods=searchResult.ToList();
